@@ -297,22 +297,21 @@
             <version>3.1.0</version>
         </dependency>
 
-
+<!--
         <dependency>
             <groupId>org.wso2.orbit.com.lmax</groupId>
             <artifactId>disruptor</artifactId>
             <version>3.3.2.wso2v2</version>
         </dependency>
-
+-->
 
         <!-- https://mvnrepository.com/artifact/org.wso2.orbit.com.lmax/disruptor -->
-       <!--
+
         <dependency>
             <groupId>org.wso2.orbit.com.lmax</groupId>
             <artifactId>disruptor</artifactId>
             <version>3.3.7.wso2v1</version>
         </dependency>
--->
 
         <dependency>
             <groupId>org.quartz-scheduler.wso2</groupId>
@@ -438,7 +437,7 @@
                 <repository>
                     <id>snapshots-repo</id>
                     <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-                    <releases><enabled>true</enabled></releases>
+                    <releases><enabled>false</enabled></releases>
                     <snapshots><enabled>true</enabled></snapshots>
                 </repository>
 
