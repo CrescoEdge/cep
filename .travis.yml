@@ -8,9 +8,11 @@ script:
 - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install
 after_success:
 - mvn package bundle:bundle
-- mvn deploy:deploy-file -Dfile=target/cep-1.0-SNAPSHOT.jar -Durl=https://oss.sonatype.org/content/repositories/snapshots -DrepositoryId=ossrh -DpomFile=pom.xml --settings travis-settings.xml -DskipTests=true -B
+- mvn deploy:deploy-file -Dfile=target/cep-1.0-SNAPSHOT.jar -Durl=https://oss.sonatype.org/content/repositories/snapshots
+  -DrepositoryId=ossrh -DpomFile=pom.xml --settings travis-settings.xml -DskipTests=true
+  -B
 - bash <(curl -s https://codecov.io/bash)
 env:
   global:
   - SONATYPE_USERNAME=crescoedge
-  - secure: rgGGnySx4pd6kgbxxVSFnG/PRznbFaxsUuYQ2WGutxzSHg+0jWE6UTcOZTi++RT2x5Ib6DLRIwTamQeCZkAy/xsuYUKS4xIZMQN5zCqYeX2m5c93jzSVomMq+1kcMkcE4bF0rv/hLG8jVKB/2R7Ubfcwyn4MZk5zPgFmD03t4OGKv46o75clwtSJZOjISnJowwrGVZA3u/UaEI5XthwO0WJkp1mMGqzoyuCfgjqhOQ0ebFhtnL7YheZjuMWtWp4LQZgY7FYRTetXInwgl/s0sm6cM/1CZaFE+35CGe8wkvB46k05iQmt6iP5bOqog1AtInNXkECTUHw12t7ZwLdnIfME88VyBLHGHXNzrf3cLiIa6reF3XiBci1+VZMbCqPbm6DRZIxz9DrgA6abnqIm8RcLw03vy1UmkVWkzGW6O2snNpze0I9PsHVwgvi7ShAP6WEc1QNrfeKY4JhGeLevOddBduYQ6diBV1L1JVYn7AN0qQ4g7zXdbKgjf+wvfJA//dzOVcZkDmXv/emf1Q8PoTI2eQAhpfh9s7hkA9c76XH5O2ZbGc2dnV2Q0ptI81VRfHC6lWiGkyu7alGqj4FG8nTiLBwQu61SUQhYVlo/FovP5h7QWTbe9uYTZR8BZ95nCrkKLgnq3sEKmY9TBuk3gEVfosARM3TfabmaIbH875I=
+  - secure: CpQQNHCUAEoqFRXmENXD+Hf4naUz0SJy0/GFjeMw2WeFCOr5/GSPXMquqbNROkjMvOJeSl0/Yhv0bKFHZd3C1w60YF/G0RPK1vLrS7CzrnoKAN2zuptzG1mB9TwNSJiEJ5wvjbWD2aHOCQcg0si20PAlQ1ZBSVZ8rUZKtVepyS5IWx1odiPZaErwViJe5FmZhJIyWZZySBgQgE9yc7ncpjIkEEdz1D1AZnCbXmaifk3SHMARauWUA34bZ2vbz8DrcqitknczWLkjYYRgW+HO0II/SKNFokFwMh3FvkzTTzZocxiO30WEb4/eqGGiCqUjl2BRzoqHzGPY95LPpgAV+2k7LCKkmdPr/xDpx+wWBpAwbZ8RSdlG6vprLoblElVffb0mUDFjdiXehXLNG2DwGK3zyOqismXqqontAtaeLntqkZSyGaMLMCqg4v0NU2xfLqZL336IROggAG6ZfEcrOuNQNyhAwp+Wh6JutorCGvJ+wC2Uion9t5DmIK38oywoAGR1Y5LnjHfisiMhcthKQbAZDQcesBJVapyFygENJK5RKhwdp7D+TXdpiypsbDWx2iwqd6XuG0AMDHL0pEHGLIzGf/6vkXyRhsPa4eRyO4eNKx9jQjA0jXp93WrZC+TMMEa2csVLjYXuMZg/s0qbfSsg+xAkaoM00RO4ujvT0dQ=
