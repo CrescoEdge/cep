@@ -5,7 +5,7 @@ addons:
     token:
       secure: GDZs1yHK2iQphKTOkHmdLkqeVwG2Mw9hrFvJkfGuRgy26qjIYyelr8yrPMIhlbBLvJ0lYLogME1rEX4DG3ZqTSOIaSrdvoTGOsUh4NW3hz/j3MI3Kg+yDJM6F+e75s0PyXcqdvp4htmWF4htmj5MPtr/zlRMvnMYjApGGQ+L9GowmlYhnA2rb8v1UEAEkygS5PZDbam71ttxb+ReSrAhdZ+gI7zXy0D0FfO6M9S7Ggot26X3GC2ep7pkObJFsMaB0Y78UChlOLbEArN9HxwrZcOMuNHxGRotptw81STJdxwx2ECd4L3iNF5bvVNoffAOfAn5K1BwjSh7uLbOvtvT4t8SvkfVF/3nbY9V2ckl3wVHt//XbAHqdNIm2TmYP8BKcweNfqLWIawv5zUtL62juJUYSYxCH8WGhAsNc6U9CNkD0rKki72woWmoGBiCz9qhNSRPY1Pa4U3yPJUj8yLLspP3g74J7lhwn8HBOT5KGCrhDeiw3+kRQ38UBYlDr70ATILJhZlO7stfKm9BfXCnNmaWRrK7enjf0ueoDbPKXrDlrKy9CET1pFJlHoKcNsuZDMSv7DKQVMaEi3G30apagiQVpQxs52kM3o6cyV+J+mGWamhLwqaEoog91M3jV1L/Cs+4AXXPPyzqDIo250iFDVMUA+zY4n2GVZsTSfkCOgc=
 script:
-- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
+- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install
 after_success:
 - mvn package bundle:bundle
 - mvn deploy:deploy-file -Dfile=target/cep-1.0-SNAPSHOT.jar -Durl=https://oss.sonatype.org/content/repositories/snapshots -DrepositoryId=ossrh -DpomFile=pom.xml --settings travis-settings.xml -DskipTests=true -B
