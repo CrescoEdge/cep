@@ -18,6 +18,22 @@
 
     </properties>
 
+    <repositories>
+        <repository>
+            <id>wso2-maven2-repository</id>
+            <name>WSO2 Maven2 Repository</name>
+            <url>http://dist.wso2.org/maven2</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </releases>
+        </repository>
+    </repositories>
+
     <dependencies>
 
 
@@ -297,21 +313,22 @@
             <version>3.1.0</version>
         </dependency>
 
-        <!--
+
         <dependency>
             <groupId>org.wso2.orbit.com.lmax</groupId>
             <artifactId>disruptor</artifactId>
             <version>3.3.2.wso2v2</version>
         </dependency>
-        -->
+
 
         <!-- https://mvnrepository.com/artifact/org.wso2.orbit.com.lmax/disruptor -->
+       <!--
         <dependency>
             <groupId>org.wso2.orbit.com.lmax</groupId>
             <artifactId>disruptor</artifactId>
             <version>3.3.7.wso2v1</version>
         </dependency>
-
+-->
 
         <dependency>
             <groupId>org.quartz-scheduler.wso2</groupId>
