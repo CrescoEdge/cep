@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.wso2.extension.siddhi.map.avro:siddhi-map-avro:1.0.7">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/wso2/extension/siddhi/map/avro/siddhi-map-avro/1.0.7/siddhi-map-avro-1.0.7.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/wso2/extension/siddhi/map/avro/siddhi-map-avro/1.0.7/siddhi-map-avro-1.0.7-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/wso2/extension/siddhi/map/avro/siddhi-map-avro/1.0.7/siddhi-map-avro-1.0.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
