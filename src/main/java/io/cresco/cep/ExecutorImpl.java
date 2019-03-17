@@ -19,6 +19,7 @@ public class ExecutorImpl implements Executor {
         this.cep = cep;
     }
 
+
     @Override
     public MsgEvent executeCONFIG(MsgEvent incoming) {
 
