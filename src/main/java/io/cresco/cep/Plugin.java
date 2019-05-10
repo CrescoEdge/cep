@@ -22,6 +22,7 @@ import java.util.Map;
         reference=@Reference(name="io.cresco.library.agent.AgentService", service=AgentService.class)
 )
 
+
 public class Plugin implements PluginService {
 
     public BundleContext context;
