@@ -88,28 +88,18 @@ public class ExecutorImpl implements Executor {
 
     public MsgEvent addCEPQuery(MsgEvent incoming) {
 
-        logger.info("Adding Stream: " + incoming.getParam("output_stream_name"));
         //System.out.println("ADD QUERY : " + incoming.getParams().toString());
 
         String cepId = null;
 
         if(incoming.getParam("query_id") == null) {
             cepId = UUID.randomUUID().toString();
-            logger.info("cepId:" + incoming.getParam("query_id") + " generated");
+            //logger.info("cepId:" + incoming.getParam("query_id") + " generated");
         } else {
             cepId = incoming.getParam("query_id");
-            logger.info("cepId:" + incoming.getParam("query_id") + " provided");
+            //logger.info("cepId:" + incoming.getParam("query_id") + " provided");
         }
 
-        /*
-        createQuery.setParam("input_stream_name", inputStreamName);
-            createQuery.setParam("input_stream_definition", inputStreamDefinition);
-            createQuery.setParam("output_stream_name", outputStreamName);
-            createQuery.setParam("output_stream_definition", outputStreamDefinition);
-            createQuery.setParam("query_id", cepId);
-            createQuery.setParam("query", queryString);
-
-         */
 
         String inputStreamName = incoming.getParam("input_stream_name");
         String inputStreamDefinition = incoming.getParam("input_stream_definition");
@@ -120,9 +110,12 @@ public class ExecutorImpl implements Executor {
         boolean isCreated = cep.createCEP(cepId, inputStreamName, inputStreamDefinition, outputStreamName, outputStreamDefinition, queryString);
 
         if(isCreated) {
+            logger.info("Added CEPID: " + cepId + " Input Stream: " + inputStreamName + " Output Stream: " + outputStreamName);
             incoming.setParam("status_code","10");
             incoming.setParam("status_desc","CEP Instance Started");
         } else {
+            logger.error("Failed Add CEPID: " + cepId + " Input Stream: " + inputStreamName + " Output Stream: " + outputStreamName);
+
             incoming.setParam("status_code","9");
             incoming.setParam("status_desc","Could not start CEP Instance");
         }
