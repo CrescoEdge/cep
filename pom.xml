@@ -14,336 +14,11 @@
         <jdk>1.8</jdk>
         <maven.compiler.version>3.8.1</maven.compiler.version>
         <maven.bundle.compiler.version>4.2.1</maven.bundle.compiler.version>
-        <siddhi.version>4.2.17</siddhi.version>
-        <!-- <siddhi.version>4.5.11</siddhi.version> -->
+        <siddhi.version>5.1.2</siddhi.version>
 
     </properties>
 
     <dependencies>
-
-        <!--
-        org.wso2.siddhi.*;
-        io.github.openfeign.*;
-        org.atteo.classindex.*;
-        com.fasterxml.jackson.core.*;
-        org.codehaus.janino.*;
-        net.sf.cglib.*;
-        org.antlr.*;
-        com.jayway.jsonpath.*;
-        io.dropwizard.metrics.*;
-        org.wso2.orbit.com.lmax.*;
-        org.quartz-scheduler.wso2.*;
-        org.mvel.*;
-        com.google.guava.*;
-        -->
-
-        <dependency>
-            <groupId>org.apache.avro</groupId>
-            <artifactId>avro</artifactId>
-            <version>1.8.2</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.siddhi</groupId>
-            <artifactId>siddhi-core</artifactId>
-            <version>${siddhi.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.osgi</groupId>
-                    <artifactId>org.osgi.core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.eclipse.osgi</groupId>
-                    <artifactId>org.eclipse.osgi.services</artifactId>
-                </exclusion>
-
-                <exclusion>
-                    <groupId>org.wso2.siddhi</groupId>
-                    <artifactId>siddhi-query-api</artifactId>
-                </exclusion>
-
-                <exclusion>
-                    <groupId>org.wso2.siddhi</groupId>
-                    <artifactId>siddhi-query-compiler</artifactId>
-                </exclusion>
-
-                <exclusion>
-                    <groupId>org.wso2.siddhi</groupId>
-                    <artifactId>siddhi-annotations</artifactId>
-                </exclusion>
-
-                <exclusion>
-                    <groupId>com.google.code.gson</groupId>
-                    <artifactId>gson</artifactId>
-                </exclusion>
-
-                <exclusion>
-                    <groupId>org.apache.log4j.wso2</groupId>
-                    <artifactId>log4j</artifactId>
-                </exclusion>
-
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-simple</artifactId>
-                </exclusion>
-
-                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava</artifactId>
-                </exclusion>
-
-                <exclusion>
-                    <groupId>org.wso2.orbit.com.lmax</groupId>
-                    <artifactId>disruptor</artifactId>
-                </exclusion>
-
-                <exclusion>
-                    <groupId>org.quartz-scheduler.wso2</groupId>
-                    <artifactId>quartz</artifactId>
-                </exclusion>
-
-                <exclusion>
-                    <groupId>io.dropwizard.metrics</groupId>
-                    <artifactId>metrics-core</artifactId>
-                </exclusion>
-
-                <exclusion>
-                    <groupId>com.jayway.jsonpath</groupId>
-                    <artifactId>json-path</artifactId>
-                </exclusion>
-
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.siddhi</groupId>
-            <artifactId>siddhi-query-api</artifactId>
-            <version>${siddhi.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.log4j.wso2</groupId>
-                    <artifactId>log4j</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.siddhi</groupId>
-            <artifactId>siddhi-query-compiler</artifactId>
-            <version>${siddhi.version}</version>
-            <exclusions>
-
-                <exclusion>
-                    <groupId>org.apache.log4j.wso2</groupId>
-                    <artifactId>log4j</artifactId>
-                </exclusion>
-
-                <exclusion>
-                    <groupId>org.wso2.siddhi</groupId>
-                    <artifactId>siddhi-query-api</artifactId>
-                </exclusion>
-
-                <exclusion>
-                    <groupId>org.mvel</groupId>
-                    <artifactId>mvel2</artifactId>
-                </exclusion>
-
-                <exclusion>
-                    <groupId>org.antlr</groupId>
-                    <artifactId>antlr4-runtime</artifactId>
-                </exclusion>
-
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.siddhi</groupId>
-            <artifactId>siddhi-annotations</artifactId>
-            <version>${siddhi.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.atteo.classindex</groupId>
-                    <artifactId>classindex</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.extension.siddhi.map.avro</groupId>
-            <artifactId>siddhi-map-avro</artifactId>
-            <version>1.0.7</version>
-           <exclusions>
-               <exclusion>
-                   <groupId>org.apache.log4j.wso2</groupId>
-                   <artifactId>log4j</artifactId>
-               </exclusion>
-
-               <exclusion>
-                   <groupId>org.wso2.siddhi</groupId>
-                   <artifactId>siddhi-core</artifactId>
-               </exclusion>
-
-               <exclusion>
-                   <groupId>org.wso2.siddhi</groupId>
-                   <artifactId>siddhi-query-api</artifactId>
-               </exclusion>
-
-               <exclusion>
-                   <groupId>org.wso2.siddhi</groupId>
-                   <artifactId>siddhi-annotations</artifactId>
-               </exclusion>
-
-               <exclusion>
-                   <groupId>org.apache.zookeeper</groupId>
-                   <artifactId>zookeeper</artifactId>
-               </exclusion>
-
-               <exclusion>
-                   <groupId>org.apache.kafka</groupId>
-                   <artifactId>kafka_2.11</artifactId>
-               </exclusion>
-
-               <exclusion>
-                   <groupId>org.wso2.extension.siddhi.io.kafka</groupId>
-                   <artifactId>siddhi-io-kafka</artifactId>
-               </exclusion>
-
-               <exclusion>
-                   <groupId>org.apache.avro</groupId>
-                   <artifactId>avro</artifactId>
-               </exclusion>
-
-               <exclusion>
-                   <groupId>com.fasterxml.jackson.core</groupId>
-                   <artifactId>jackson-databind</artifactId>
-               </exclusion>
-
-               <exclusion>
-                   <groupId>io.github.openfeign</groupId>
-                   <artifactId>feign-okhttp</artifactId>
-               </exclusion>
-
-               <exclusion>
-                   <groupId>io.github.openfeign</groupId>
-                   <artifactId>feign-gson</artifactId>
-               </exclusion>
-
-               <exclusion>
-                   <groupId>org.apache.curator</groupId>
-                   <artifactId>curator-test</artifactId>
-               </exclusion>
-
-           </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>io.github.openfeign</groupId>
-            <artifactId>feign-core</artifactId>
-            <version>9.3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.atteo.classindex</groupId>
-            <artifactId>classindex</artifactId>
-            <version>3.4</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <!-- <version>2.7.4</version> -->
-            <!-- <version>2.8.11.1</version> -->
-            <version>2.9.9.2</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.core</groupId>
-                    <artifactId>jackson-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.core</groupId>
-                    <artifactId>jackson-annotations</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <!-- <version>2.7.4</version> -->
-            <!-- <version>2.8.11.1</version> -->
-            <version>2.9.9</version>
-
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <!-- <version>2.7.4</version> -->
-            <!-- <version>2.8.11.1</version> -->
-            <version>2.9.9</version>
-
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.janino</groupId>
-            <artifactId>janino</artifactId>
-            <version>3.0.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.janino</groupId>
-            <artifactId>commons-compiler</artifactId>
-            <version>3.0.7</version>
-        </dependency>
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib-nodep</artifactId>
-            <version>3.2.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.antlr</groupId>
-            <artifactId>antlr4-runtime</artifactId>
-            <version>4.7</version>
-        </dependency>
-        <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path</artifactId>
-            <version>2.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-core</artifactId>
-            <version>3.1.0</version>
-        </dependency>
-
-<!--
-        <dependency>
-            <groupId>org.wso2.orbit.com.lmax</groupId>
-            <artifactId>disruptor</artifactId>
-            <version>3.3.2.wso2v2</version>
-        </dependency>
--->
-
-        <!-- https://mvnrepository.com/artifact/org.wso2.orbit.com.lmax/disruptor -->
-
-        <dependency>
-            <groupId>org.wso2.orbit.com.lmax</groupId>
-            <artifactId>disruptor</artifactId>
-            <version>3.3.7.wso2v1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.quartz-scheduler.wso2</groupId>
-            <artifactId>quartz</artifactId>
-            <version>2.1.1.wso2v1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mvel</groupId>
-            <artifactId>mvel2</artifactId>
-            <version>2.2.1.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>19.0</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.8.0</version>
-        </dependency>
 
         <dependency>
             <groupId>org.osgi</groupId>
@@ -399,6 +74,161 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>io.siddhi</groupId>
+            <artifactId>siddhi-core</artifactId>
+            <version>${siddhi.version}</version>
+            <exclusions>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>io.siddhi</groupId>
+            <artifactId>siddhi-query-api</artifactId>
+            <version>${siddhi.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.siddhi</groupId>
+            <artifactId>siddhi-query-compiler</artifactId>
+            <version>${siddhi.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.siddhi</groupId>
+            <artifactId>siddhi-annotations</artifactId>
+            <version>${siddhi.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-core</artifactId>
+            <version>9.3.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.siddhi.extension.map.json</groupId>
+            <artifactId>siddhi-map-json</artifactId>
+            <version>5.0.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.atteo.classindex</groupId>
+            <artifactId>classindex</artifactId>
+            <version>3.8</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <!-- <version>2.7.4</version> -->
+            <!-- <version>2.8.11.1</version> -->
+            <version>2.9.10.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-annotations</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.9.10</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.9.10</version>
+
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.wso2.orbit.org.apache.tapestry/tapestry-json -->
+        <dependency>
+            <groupId>org.wso2.orbit.org.apache.tapestry</groupId>
+            <artifactId>tapestry-json</artifactId>
+            <version>5.4.1.wso2v1</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/net.minidev/json-smart -->
+        <dependency>
+            <groupId>net.minidev</groupId>
+            <artifactId>json-smart</artifactId>
+            <version>2.2</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>janino</artifactId>
+            <version>3.0.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>commons-compiler</artifactId>
+            <version>3.0.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>3.2.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4-runtime</artifactId>
+            <version>4.7.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.dropwizard.metrics</groupId>
+            <artifactId>metrics-core</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wso2.orbit.com.lmax</groupId>
+            <artifactId>disruptor</artifactId>
+            <version>3.4.2.wso2v1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.quartz-scheduler.wso2</groupId>
+            <artifactId>quartz</artifactId>
+            <version>2.1.1.wso2v1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mvel</groupId>
+            <artifactId>mvel2</artifactId>
+            <version>2.4.4.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.5</version>
+        </dependency>
 
     </dependencies>
 

@@ -101,24 +101,40 @@ public class ExecutorImpl implements Executor {
             logger.info("cepId:" + incoming.getParam("query_id") + " provided");
         }
 
-        cep.createCEP(cepId,
-                incoming.getCompressedParam("input_schema"),
-                incoming.getParam("input_stream_name"),
-                incoming.getParam("output_stream_name"),
-                incoming.getParam("output_stream_attributes"),
-                incoming.getParam("query")
-        );
+        /*
+        createQuery.setParam("input_stream_name", inputStreamName);
+            createQuery.setParam("input_stream_definition", inputStreamDefinition);
+            createQuery.setParam("output_stream_name", outputStreamName);
+            createQuery.setParam("output_stream_definition", outputStreamDefinition);
+            createQuery.setParam("query_id", cepId);
+            createQuery.setParam("query", queryString);
 
+         */
+
+        String inputStreamName = incoming.getParam("input_stream_name");
+        String inputStreamDefinition = incoming.getParam("input_stream_definition");
+        String outputStreamName = incoming.getParam("output_stream_name");
+        String outputStreamDefinition = incoming.getParam("output_stream_definition");
+        String queryString = incoming.getParam("query");
+
+        boolean isCreated = cep.createCEP(cepId, inputStreamName, inputStreamDefinition, outputStreamName, outputStreamDefinition, queryString);
+
+        if(isCreated) {
+            incoming.setParam("status_code","10");
+            incoming.setParam("status_desc","CEP Instance Started");
+        } else {
+            incoming.setParam("status_code","9");
+            incoming.setParam("status_desc","Could not start CEP Instance");
+        }
         incoming.setParam("query_id",cepId);
 
         //remove body
-        incoming.removeParam("input_schema");
         incoming.removeParam("input_stream_name");
-        //incoming.removeParam("output_stream_name");
-        incoming.removeParam("output_stream_attributes");
+        incoming.removeParam("input_stream_definition");
+        incoming.removeParam("output_stream_name");
+        incoming.removeParam("output_stream_definition");
         incoming.removeParam("query");
         incoming.removeParam("output_list");
-        incoming.setParam("output_schema", cep.getCEPInstance(cepId).getSchema(incoming.getParam("output_stream_name")).toString());
 
         return incoming;
     }

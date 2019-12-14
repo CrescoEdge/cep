@@ -1,26 +1,16 @@
 package io.cresco.cep;
 
+import com.google.gson.Gson;
 import io.cresco.library.data.TopicType;
 import io.cresco.library.plugin.PluginBuilder;
 import io.cresco.library.utilities.CLogger;
-import org.apache.avro.Schema;
-import org.apache.avro.generic.GenericData;
-import org.apache.avro.generic.GenericDatumReader;
-import org.apache.avro.io.*;
-import org.apache.avro.reflect.ReflectData;
-import org.apache.avro.reflect.ReflectDatumWriter;
-import org.apache.avro.specific.SpecificDatumWriter;
-import org.wso2.extension.siddhi.map.avro.util.schema.RecordSchema;
-import org.wso2.siddhi.core.SiddhiAppRuntime;
-import org.wso2.siddhi.core.SiddhiManager;
-import org.wso2.siddhi.core.stream.output.sink.Sink;
-import org.wso2.siddhi.core.util.transport.InMemoryBroker;
-import org.wso2.siddhi.query.api.definition.Attribute;
+import io.siddhi.core.SiddhiAppRuntime;
+import io.siddhi.core.SiddhiManager;
+import io.siddhi.core.util.transport.InMemoryBroker;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
-import java.io.ByteArrayOutputStream;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -32,30 +22,29 @@ public class CEPInstance {
     private SiddhiManager siddhiManager;
     private SiddhiAppRuntime siddhiAppRuntime;
 
-    private Map<String,Schema> schemaMap;
     private Map<String,String> topicMap;
 
-    private AtomicBoolean lockSchema = new AtomicBoolean();
     private AtomicBoolean lockTopic = new AtomicBoolean();
+
+    private Gson gson;
 
     private String cepId;
 
 
-    public CEPInstance(PluginBuilder pluginBuilder, SiddhiManager siddhiManager, String cepId, String inputRecordSchemaString, String inputStreamName, String outputStreamName, String outputStreamAttributesString,String queryString) {
+    public CEPInstance(PluginBuilder pluginBuilder, SiddhiManager siddhiManager, String cepId, String inputStreamName, String inputStreamDefinition, String outputStreamName, String outputStreamDefinition, String queryString) {
 
         this.plugin = pluginBuilder;
         logger = plugin.getLogger(CEPInstance.class.getName(),CLogger.Level.Info);
 
-        schemaMap = Collections.synchronizedMap(new HashMap<>());
         topicMap = Collections.synchronizedMap(new HashMap<>());
 
         this.siddhiManager = siddhiManager;
 
         this.cepId = cepId;
 
+        gson = new Gson();
 
         try {
-
 
             String inputTopic = UUID.randomUUID().toString();
             String outputTopic = UUID.randomUUID().toString();
@@ -65,25 +54,14 @@ public class CEPInstance {
                 topicMap.put(outputStreamName, outputTopic);
             }
 
-            Schema.Parser parser = new Schema.Parser();
-            Schema inputSchema = parser.parse(inputRecordSchemaString);
 
-            synchronized (lockSchema) {
-                schemaMap.put(inputStreamName, inputSchema);
-            }
-
-            String sourceString = getSourceString(inputSchema, inputTopic, inputStreamName);
-            String sinkString = getSinkString(outputTopic,outputStreamName,outputStreamAttributesString);
+            String sourceString = getSourceString(inputStreamDefinition, inputTopic, inputStreamName);
+            String sinkString = getSinkString(outputStreamDefinition, outputTopic,outputStreamName);
 
             //Generating runtime
             siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(sourceString + " " + sinkString + " " + queryString);
 
-            Schema outputSchema = getRecordSchema(outputStreamName);
-
-            synchronized (lockSchema) {
-                schemaMap.put(outputStreamName, outputSchema);
-            }
-
+            //public void createCEP(String inputStreamName, String outputStreamName, String inputStreamAttributesString, String outputStreamAttributesString,String queryString) {
 
             MessageListener ml = new MessageListener() {
                 public void onMessage(Message msg) {
@@ -93,7 +71,7 @@ public class CEPInstance {
                         if (msg instanceof TextMessage) {
 
                             //System.out.println(RXQueueName + " msg:" + ((TextMessage) msg).getText());
-                            InMemoryBroker.publish(inputTopic, getByteGenericDataRecordFromString(inputRecordSchemaString, ((TextMessage) msg).getText()));
+                            InMemoryBroker.publish(inputTopic, ((TextMessage) msg).getText());
                             //String message = ((TextMessage) msg).getText();
                             //logger.error("YES!!! " + message);
 
@@ -108,7 +86,7 @@ public class CEPInstance {
             pluginBuilder.getAgentService().getDataPlaneService().addMessageListener(TopicType.AGENT,ml,"stream_name='" + inputStreamName + "'");
 
 
-            InMemoryBroker.Subscriber subscriberTest = new OutputSubscriber(plugin,cepId,outputSchema,outputTopic,outputStreamName);
+            InMemoryBroker.Subscriber subscriberTest = new OutputSubscriber(plugin,cepId,outputTopic,outputStreamName);
 
             //subscribe to "inMemory" broker per topic
             InMemoryBroker.subscribe(subscriberTest);
@@ -156,9 +134,6 @@ public class CEPInstance {
             }
             */
 
-            synchronized (lockSchema) {
-                schemaMap.clear();
-            }
 
             synchronized (lockTopic) {
                 topicMap.clear();
@@ -179,17 +154,10 @@ public class CEPInstance {
                 }
             }
 
-            Schema schema = null;
 
-            synchronized (lockSchema) {
-                if(schemaMap.containsKey(streamName)) {
-                    schema = schemaMap.get(streamName);
-                }
-            }
-
-                if ((topicName != null) && (schema != null)) {
+                if (topicName != null) {
                 //start measurement
-                    InMemoryBroker.publish(topicName, getByteGenericDataRecordFromString(schema, jsonPayload));
+                    InMemoryBroker.publish(topicName, jsonPayload);
                 } else {
                     System.out.println("input error : no schema");
                 }
@@ -216,14 +184,7 @@ public class CEPInstance {
 
             Ticker tick = new Ticker(source, urn, metric, ts, value);
 
-            Schema schema = ReflectData.get().getSchema(Ticker.class);
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            Encoder encoder = new EncoderFactory().jsonEncoder(schema, outputStream);
-            DatumWriter<Ticker> writer = new ReflectDatumWriter<>(schema);
-            writer.write(tick, encoder);
-            encoder.flush();
-
-            rec = new String(outputStream.toByteArray());
+            rec = gson.toJson(tick);
 
         } catch(Exception ex) {
             ex.printStackTrace();
@@ -232,172 +193,12 @@ public class CEPInstance {
         return rec;
     }
 
-    private GenericData.Record getGenericPayload() {
-
-        GenericData.Record rec = null;
-
-        try{
-
-            String source = "mysource";
-            String urn = "myurn";
-            String metric = "mymetric";
-            long ts = System.currentTimeMillis();
-
-            Random r = new Random();
-            double value = r.nextDouble();
-
-            Ticker tick = new Ticker(source, urn, metric, ts, value);
-
-            Schema schema = ReflectData.get().getSchema(Ticker.class);
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            Encoder encoder = new EncoderFactory().jsonEncoder(schema, outputStream);
-            DatumWriter<Ticker> writer = new ReflectDatumWriter<>(schema);
-            writer.write(tick, encoder);
-            encoder.flush();
-
-            String input = new String(outputStream.toByteArray());
-            Decoder decoder = new DecoderFactory().jsonDecoder(schema, input);
-            DatumReader<GenericData.Record> reader = new GenericDatumReader<>(schema);
-            rec = reader.read(null, decoder);
-
-
-        } catch(Exception ex) {
-            ex.printStackTrace();
-        }
-
-        return rec;
-    }
-
-    private byte[] getByteGenericDataRecordFromString(Schema schema, String jsonInputPayload) {
-
-        byte[] bytes = null;
-        try{
-
-            Decoder decoder = new DecoderFactory().jsonDecoder(schema, jsonInputPayload);
-            DatumReader<GenericData.Record> reader = new GenericDatumReader<>(schema);
-            GenericData.Record rec = reader.read(null, decoder);
-
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            BinaryEncoder encoder = EncoderFactory.get().binaryEncoder(out, null);
-            DatumWriter<GenericData.Record> writer = new SpecificDatumWriter<>(schema);
-
-            writer.write(rec, encoder);
-            encoder.flush();
-            out.close();
-            bytes = out.toByteArray();
-
-        } catch(Exception ex) {
-            ex.printStackTrace();
-        }
-
-        return bytes;
-    }
-
-    private byte[] getByteGenericDataRecordFromString(String schemaString, String jsonInputPayload) {
-
-        byte[] bytes = null;
-        try{
-
-            Schema.Parser parser = new Schema.Parser();
-            Schema schema = parser.parse(schemaString);
-
-            Decoder decoder = new DecoderFactory().jsonDecoder(schema, jsonInputPayload);
-            DatumReader<GenericData.Record> reader = new GenericDatumReader<>(schema);
-            GenericData.Record rec = reader.read(null, decoder);
-
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            BinaryEncoder encoder = EncoderFactory.get().binaryEncoder(out, null);
-            DatumWriter<GenericData.Record> writer = new SpecificDatumWriter<>(schema);
-
-            writer.write(rec, encoder);
-            encoder.flush();
-            out.close();
-            bytes = out.toByteArray();
-
-        } catch(Exception ex) {
-            ex.printStackTrace();
-        }
-
-        return bytes;
-    }
-
-    private byte[] getBytePayload() {
-
-        byte[] bytes = null;
-        try{
-
-            Schema schema = ReflectData.get().getSchema(Ticker.class);
-            GenericData.Record rec = getGenericPayload();
-
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            BinaryEncoder encoder = EncoderFactory.get().binaryEncoder(out, null);
-            DatumWriter<GenericData.Record> writer = new SpecificDatumWriter<>(schema);
-
-            writer.write(rec, encoder);
-            encoder.flush();
-            out.close();
-            bytes = out.toByteArray();
-
-
-        } catch(Exception ex) {
-            ex.printStackTrace();
-        }
-
-        return bytes;
-    }
-
-    public Schema getSchema(String streamName) {
-        Schema returnSchema = null;
-        try {
-
-            synchronized (lockSchema) {
-                if (schemaMap.containsKey(streamName)) {
-                    returnSchema = schemaMap.get(streamName);
-                }
-            }
-
-        } catch(Exception ex) {
-            ex.printStackTrace();
-        }
-        return returnSchema;
-    }
-
-    private Schema getRecordSchema(String streamName) {
-        Schema returnSchema = null;
-        try {
-
-            Collection<List<Sink>> sinkCollectionList = siddhiAppRuntime.getSinks();
-            for (Iterator<List<Sink>> iterator = sinkCollectionList.iterator(); iterator.hasNext();) {
-                List<Sink> sinkList = iterator.next();
-
-                for (Sink sink : sinkList) {
-
-                    if(sink.getStreamDefinition().getId().equals(streamName)) {
-                        List<Attribute> attributeList = sink.getStreamDefinition().getAttributeList();
-                        RecordSchema recordSchema = new RecordSchema();
-                        returnSchema = recordSchema.generateAvroSchema(attributeList, streamName);
-                    }
-                }
-            }
-
-        } catch(Exception ex) {
-            ex.printStackTrace();
-        }
-        return returnSchema;
-    }
-
-    private String getSourceString(Schema schema, String topic, String streamName) {
+    private String getSourceString(String inputStreamDefinition, String topic, String streamName) {
         String sourceString = null;
         try {
 
-            StringBuilder sb = new StringBuilder();
-            List<Schema.Field> fieldList = schema.getFields();
-            for(Schema.Field field : fieldList) {
-                sb.append(field.name() + " " + field.schema().getType().getName() + ", ");
-            }
-
-            sourceString  = "@source(type='inMemory', topic='" + topic + "', @map(type='avro', schema .def = \"\"\"" + schema  + "\"\"\")) " +
-                    "define stream " + streamName + " (" + sb.substring(0,sb.length() -2) + "); ";
+            sourceString  = "@source(type='inMemory', topic='" + topic + "', @map(type='json')) " +
+                    "define stream " + streamName + " (" + inputStreamDefinition + "); ";
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -406,12 +207,12 @@ public class CEPInstance {
         return sourceString;
     }
 
-    private String getSinkString(String topic, String streamName, String outputSchemaString) {
+    private String getSinkString(String outputStreamDefinition, String topic, String streamName) {
         String sinkString = null;
         try {
 
-            sinkString = "@sink(type='inMemory', topic='" + topic + "', @map(type='avro')) " +
-                    "define stream " + streamName + " (" + outputSchemaString + "); ";
+            sinkString = "@sink(type='inMemory', topic='" + topic + "', @map(type='json')) " +
+                    "define stream " + streamName + " (" + outputStreamDefinition + "); ";
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -419,5 +220,7 @@ public class CEPInstance {
 
         return sinkString;
     }
+
+
 
 }
