@@ -1,24 +1,12 @@
 package io.cresco.cep;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import io.cresco.library.app.gEdge;
 import io.cresco.library.messaging.MsgEvent;
 import io.cresco.library.plugin.PluginBuilder;
 import io.cresco.library.utilities.CLogger;
-import org.apache.avro.Schema;
-import org.apache.avro.io.DatumWriter;
-import org.apache.avro.io.Encoder;
-import org.apache.avro.io.EncoderFactory;
-import org.apache.avro.reflect.ReflectData;
-import org.apache.avro.reflect.ReflectDatumWriter;
 
-import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.lang.reflect.Type;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MessageSender implements Runnable  {
 

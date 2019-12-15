@@ -168,30 +168,7 @@ public class CEPInstance {
         }
     }
 
-    public String getStringPayload() {
 
-        String rec = null;
-
-        try{
-
-            String source = "mysource";
-            String urn = "myurn";
-            String metric = "mymetric";
-            long ts = System.currentTimeMillis();
-
-            Random r = new Random();
-            double value = r.nextDouble();
-
-            Ticker tick = new Ticker(source, urn, metric, ts, value);
-
-            rec = gson.toJson(tick);
-
-        } catch(Exception ex) {
-            ex.printStackTrace();
-        }
-
-        return rec;
-    }
 
     private String getSourceString(String inputStreamDefinition, String topic, String streamName) {
         String sourceString = null;

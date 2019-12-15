@@ -6,8 +6,6 @@ import io.cresco.library.utilities.CLogger;
 import io.siddhi.core.util.transport.InMemoryBroker;
 
 import javax.jms.TextMessage;
-import java.io.ByteArrayOutputStream;
-import java.nio.ByteBuffer;
 
 public class OutputSubscriber implements InMemoryBroker.Subscriber {
 
