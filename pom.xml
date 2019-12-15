@@ -149,7 +149,6 @@
 
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.wso2.orbit.org.apache.tapestry/tapestry-json -->
         <dependency>
             <groupId>org.wso2.orbit.org.apache.tapestry</groupId>
             <artifactId>tapestry-json</artifactId>
@@ -293,6 +292,18 @@
                         <enabled>true</enabled>
                         <updatePolicy>never</updatePolicy>
                         <checksumPolicy>fail</checksumPolicy>
+                    </releases>
+                </repository>
+
+
+                <repository>
+                    <id>wso2.releases</id>
+                    <name>WSO2 internal Repository</name>
+                    <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                        <updatePolicy>daily</updatePolicy>
+                        <checksumPolicy>ignore</checksumPolicy>
                     </releases>
                 </repository>
 
